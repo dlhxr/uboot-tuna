@@ -243,7 +243,7 @@
 			"bootm ${loadaddr};" \
 		"fi\0" \
 	\
-	"boot_custom_emmc=echo Booting custom image; " \
+	"boot_2nd_emmc=echo Booting Second Rom; " \
 		"tuna_set_led 4; " \
 		"setenv loadaddr 0x81f00000; " \
 		"setenv script_img /media/boot/2nd.scr.uimg; " \
@@ -257,7 +257,7 @@
 		"run load_boot_script; " \
 		"run custom_boot\0" \
 	\
-	"boot_system=echo Booting SYSTEM; "\
+	"boot_system=echo Booting First Rom; "\
 		"tuna_set_led 6; " \
 		"setenv bootargs " ANDROID_CMDLINE " ; " \
 		"setenv kernel_part 0xc; " \
@@ -265,19 +265,27 @@
 		"setenv devtype mmc; " \
 		"run custom_boot\0" \
 	\
-	"boot_recovery=echo Booting RECOVERY; " \
+	"boot_3rd_emmc=echo Booting Third Rom; " \
 		"tuna_set_led 2; " \
+		"setenv loadaddr 0x81f00000; " \
+		"setenv script_img /media/boot/3rd.scr.uimg; " \
+		"setenv kernel_name /media/boot/3rd.img; " \
+		"setenv script_part 0xc; " \
+		"setenv kernel_part 0xc; " \
+		"setenv rootpart 0xc; " \
+		"setenv devnum 0; " \
+		"setenv devtype mmc; " \
+		"setenv bootargs " ANDROID_CMDLINE " ; " \
+		"run load_boot_script; " \
+		"run custom_boot\0" \
+	\
+	"boot_recovery=echo Booting Recovery; " \
+		"tuna_set_led 3; " \
 		"setenv bootargs " ANDROID_CMDLINE " ; " \
 		"mmc dev 0; " \
 		"mmc read ${loadaddr} 0x18000 0x6000; "\
 		"echo Command line: ${bootargs}; " \
 		"bootm ${loadaddr}\0" \
-	\
-	BOOT_KERNEL \
-	"go_usbtty=setenv stdin usbtty; " \
-		"setenv stdout usbtty; " \
-		"setenv stderr usbtty; " \
-		"tuna_set_led 3\0" \
 	\
 	"tuna_boot=mmc rescan; " \
 		"mmc dev 0; " \
@@ -288,15 +296,14 @@
 			"run boot_system; " \
 			"run boot_android; " \
 		"elif test $tuna_bootmode_val -eq 1; then " \
-			"echo Recovery boot; " \
-			"run boot_recovery; " \
+			"echo 3rd Boot; " \
+			"run boot_3rd_emmc; " \
 		"elif test $tuna_bootmode_val -eq 2; then " \
-			"echo Custom boot from userdata; " \
-			"run boot_custom_emmc; " \
+			"echo 2nd Boot; " \
+			"run boot_2nd_emmc; " \
 		"elif test $tuna_bootmode_val -eq 3; then " \
-			"echo USB TTY mode; " \
-			"dhcp; " \
-			"exit 0; " \
+			"echo Recovery Boot; " \
+			"run boot_recovery; " \
 		"fi; " \
 		"tuna_set_led 7; " \
 		"echo Failed to boot\0"
