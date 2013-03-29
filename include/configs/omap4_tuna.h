@@ -243,7 +243,7 @@
 			"bootm ${loadaddr};" \
 		"fi\0" \
 	\
-	"boot_custom_emmc=echo Booting custom image; " \
+	"boot_custom_emmc=echo Booting Second Kernel; " \
 		"tuna_set_led 4; " \
 		"setenv loadaddr 0x81f00000; " \
 		"setenv script_img /media/boot/2nd.scr.uimg; " \
@@ -265,13 +265,19 @@
 		"setenv devtype mmc; " \
 		"run custom_boot\0" \
 	\
-	"boot_recovery=echo Booting RECOVERY; " \
+	"boot_recovery=echo Booting Third Kernel; " \
 		"tuna_set_led 2; " \
+		"setenv loadaddr 0x81f00000; " \
+		"setenv script_img /media/boot/3rd.scr.uimg; " \
+		"setenv kernel_name /media/boot/3rd.img; " \
+		"setenv script_part 0xc; " \
+		"setenv kernel_part 0xc; " \
+		"setenv rootpart 0xc; " \
+		"setenv devnum 0; " \
+		"setenv devtype mmc; " \
 		"setenv bootargs " ANDROID_CMDLINE " ; " \
-		"mmc dev 0; " \
-		"mmc read ${loadaddr} 0x18000 0x6000; "\
-		"echo Command line: ${bootargs}; " \
-		"bootm ${loadaddr}\0" \
+		"run load_boot_script; " \
+		"run custom_boot\0" \
 	\
 	BOOT_KERNEL \
 	"go_usbtty=setenv stdin usbtty; " \
