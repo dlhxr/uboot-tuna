@@ -223,7 +223,7 @@
 	"loadaddr=0x82000000\0" \
 	"usbtty=cdc_acm\0" \
 	"kernel_name=/media/boot/1st.img\0" \
-	"script_img/media/boot/1st.scr.uimg\0" \
+	"script_img=/media/boot/1st.scr.uimg\0" \
 	\
 	"load_boot_script=if ext4load ${devtype} ${devnum}:${script_part} " \
 			"${loadaddr} ${script_img}; then " \
