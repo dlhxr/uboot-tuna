@@ -279,13 +279,19 @@
 		"run load_boot_script; " \
 		"run custom_boot\0" \
 	\
-	"boot_recovery=echo Booting Recovery; " \
+	"boot_recovery=echo Booting Image Recovery; " \
 		"tuna_set_led 3; " \
+		"setenv loadaddr 0x81f00000; " \
+		"setenv script_img /media/boot/recovry.scr.uimg; " \
+		"setenv kernel_name /media/boot/recovery.img; " \
+		"setenv script_part 0xc; " \
+		"setenv kernel_part 0xc; " \
+		"setenv rootpart 0xc; " \
+		"setenv devnum 0; " \
+		"setenv devtype mmc; " \
 		"setenv bootargs " ANDROID_CMDLINE " ; " \
-		"mmc dev 0; " \
-		"mmc read ${loadaddr} 0x18000 0x6000; "\
-		"echo Command line: ${bootargs}; " \
-		"bootm ${loadaddr}\0" \
+		"run load_boot_script; " \
+		"run custom_boot\0" \
 	\
 	"tuna_boot=mmc rescan; " \
 		"mmc dev 0; " \
@@ -302,7 +308,7 @@
 			"echo 2nd Boot; " \
 			"run boot_2nd_emmc; " \
 		"elif test $tuna_bootmode_val -eq 3; then " \
-			"echo Recovery Boot; " \
+			"echo Image Recovery Boot; " \
 			"run boot_recovery; " \
 		"fi; " \
 		"tuna_set_led 7; " \
