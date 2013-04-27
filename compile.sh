@@ -1,6 +1,5 @@
-export PATH=/home/hoary/codesourcery/bin:$PATH
 export ARCH=arm
-export CROSS_COMPILE=arm-none-eabi-
+export CROSS_COMPILE=/home/dlhxr/codesourcery/bin/arm-none-eabi-
 make clean
 make distclean
 make omap4_tuna_config
